@@ -1,40 +1,31 @@
 import { baseApi } from '../base-api'
-import Cookies from 'js-cookie'
 
 export const api = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Get current user
+    // Get current user profile
     getUser: builder.query({
       query: () => '/profile',
       providesTags: ['User']
     }),
 
-    // Login
+    // Login - session-based authentication
     login: builder.mutation({
       query: (credentials) => ({
-        url: '/login/',
+        url: '/login',
         method: 'POST',
         body: credentials
       }),
-      async onQueryStarted(arg, { queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled
-          
-          // Save tokens to cookies
-          Cookies.set('access_token', data.access, { 
-            secure: true, 
-            sameSite: 'Strict' 
-          })
-        } catch (err) {
-          console.error('Login failed:', err)
-        }
-      },
       invalidatesTags: ['User']
     }),
     
-
-
-
+    // Logout
+    logout: builder.mutation({
+      query: () => ({
+        url: '/logout',
+        method: 'POST'
+      }),
+      invalidatesTags: ['User']
+    }),
   })
 })
 
@@ -42,6 +33,7 @@ export const api = baseApi.injectEndpoints({
 export const {
   useGetUserQuery,
   useLoginMutation,
+  useLogoutMutation,
 } = api
 
 

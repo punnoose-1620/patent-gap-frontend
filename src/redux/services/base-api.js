@@ -6,67 +6,25 @@ const mutex = new Mutex()
 
 // Base query with auth headers
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:8000/api',
+  baseUrl: '/api', // Use proxy to avoid CORS issues
+  credentials: 'include', // Important for session-based auth
   prepareHeaders: (headers) => {
     headers.set('accept', '*/*')
+    headers.set('Content-Type', 'application/json')
     
-    // Add auth token from cookies
-    const token = Cookies.get('access_token')
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`)
-    }
-
     return headers
   }
 })
 
-// Base query with automatic token refresh
-const baseQueryWithReauth = async (args, api, extraOptions) => {
-  // Wait if a refresh is already in progress
-  await mutex.waitForUnlock()
-  
+// Base query with session handling
+const baseQueryWithAuth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions)
 
-  // Handle 401 Unauthorized - refresh token
+  // Handle 401 Unauthorized - redirect to login
   if (result.error && result.error.status === 401) {
-    if (!mutex.isLocked()) {
-      const release = await mutex.acquire()
-      
-      try {
-        const refreshToken = Cookies.get('refresh_token')
-        
-        if (refreshToken) {
-          // Try to refresh the token
-          const refreshResult = await baseQuery(
-            {
-              url: '/token/refresh/',
-              method: 'POST',
-              body: { refresh: refreshToken }
-            },
-            api,
-            extraOptions
-          )
-
-          if (refreshResult.data) {
-            // Store new access token
-            Cookies.set('access_token', refreshResult.data.access)
-            
-            // Retry the original query
-            result = await baseQuery(args, api, extraOptions)
-          } else {
-            // Refresh failed - clear tokens
-            Cookies.remove('access_token')
-            Cookies.remove('refresh_token')
-          }
-        }
-      } finally {
-        release()
-      }
-    } else {
-      // Wait for the refresh to complete, then retry
-      await mutex.waitForUnlock()
-      result = await baseQuery(args, api, extraOptions)
-    }
+    // Session expired or not authenticated
+    console.log('Session expired or not authenticated')
+    // You can dispatch a logout action here if needed
   }
 
   return result
@@ -75,12 +33,13 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 // Create base API
 export const baseApi = createApi({
   reducerPath: 'baseApi',
-  baseQuery: baseQueryWithReauth,
+  baseQuery: baseQueryWithAuth,
   tagTypes: [
     'User',
     'Auth',
-    'Products',
-    'Orders',
+    'Cases',
+    'Patents',
+    'Alerts',
     // Add your tag types here
   ],
   endpoints: () => ({})
