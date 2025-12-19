@@ -1,30 +1,30 @@
-import { useState } from 'react'
-import { useLoginMutation } from '../redux/services/auth/api'
-import { useAppSelector } from '../redux/hooks'
-import { selectIsAuthenticated, selectLoginMessage } from '../redux/modules/auth/slice'
+import { useState } from 'react';
+import { useAppSelector } from '../redux/hooks';
+import { selectIsAuthenticated, selectLoginMessage } from '../redux/modules/auth/slice';
+import { useLoginMutation } from '../redux/services/auth/api';
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [login, { isLoading, error }] = useLoginMutation()
-  const isAuthenticated = useAppSelector(selectIsAuthenticated)
-  const loginMessage = useAppSelector(selectLoginMessage)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [login, { isLoading, error }] = useLoginMutation();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const loginMessage = useAppSelector(selectLoginMessage);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     try {
-      const result = await login({ email, password }).unwrap()
-      console.log('Login successful:', result)
-      
+      const result = await login({ email, password }).unwrap();
+      console.log('Login successful:', result);
+
       if (result.success) {
         // Redirect or show success message
-        alert(`Success: ${result.message}`)
+        alert(`Success: ${result.message}`);
       }
     } catch (err) {
-      console.error('Login failed:', err)
+      console.error('Login failed:', err);
     }
-  }
+  };
 
   if (isAuthenticated) {
     return (
@@ -34,17 +34,19 @@ export default function LoginForm() {
           <p style={styles.message}>{loginMessage}</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div style={styles.container}>
       <div style={styles.card}>
         <h2 style={styles.title}>Patent Gap Login</h2>
-        
+
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
-            <label htmlFor="email" style={styles.label}>Email</label>
+            <label htmlFor="email" style={styles.label}>
+              Email
+            </label>
             <input
               id="email"
               type="email"
@@ -58,7 +60,9 @@ export default function LoginForm() {
           </div>
 
           <div style={styles.formGroup}>
-            <label htmlFor="password" style={styles.label}>Password</label>
+            <label htmlFor="password" style={styles.label}>
+              Password
+            </label>
             <input
               id="password"
               type="password"
@@ -71,12 +75,12 @@ export default function LoginForm() {
             />
           </div>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={isLoading}
             style={{
               ...styles.button,
-              ...(isLoading ? styles.buttonDisabled : {})
+              ...(isLoading ? styles.buttonDisabled : {}),
             }}
           >
             {isLoading ? 'Logging in...' : 'Login'}
@@ -91,14 +95,16 @@ export default function LoginForm() {
 
         <div style={styles.info}>
           <p style={styles.infoText}>
-            <strong>Test Credentials:</strong><br />
-            Email: user@example.com<br />
+            <strong>Test Credentials:</strong>
+            <br />
+            Email: user@example.com
+            <br />
             Password: password123
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const styles = {
@@ -107,8 +113,9 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
+    width: '100%',
     backgroundColor: '#f5f5f5',
-    padding: '20px'
+    padding: '20px',
   },
   card: {
     backgroundColor: 'white',
@@ -116,29 +123,29 @@ const styles = {
     boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
     padding: '40px',
     width: '100%',
-    maxWidth: '400px'
+    maxWidth: '400px',
   },
   title: {
     fontSize: '24px',
     fontWeight: 'bold',
     marginBottom: '24px',
     textAlign: 'center',
-    color: '#333'
+    color: '#333',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px'
+    gap: '20px',
   },
   formGroup: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px'
+    gap: '8px',
   },
   label: {
     fontSize: '14px',
     fontWeight: '500',
-    color: '#555'
+    color: '#555',
   },
   input: {
     padding: '12px',
@@ -146,7 +153,7 @@ const styles = {
     border: '1px solid #ddd',
     borderRadius: '4px',
     outline: 'none',
-    transition: 'border-color 0.2s'
+    transition: 'border-color 0.2s',
   },
   button: {
     padding: '12px',
@@ -158,11 +165,11 @@ const styles = {
     borderRadius: '4px',
     cursor: 'pointer',
     transition: 'background-color 0.2s',
-    marginTop: '10px'
+    marginTop: '10px',
   },
   buttonDisabled: {
     backgroundColor: '#6c757d',
-    cursor: 'not-allowed'
+    cursor: 'not-allowed',
   },
   error: {
     padding: '12px',
@@ -170,25 +177,24 @@ const styles = {
     border: '1px solid #fcc',
     borderRadius: '4px',
     color: '#c33',
-    fontSize: '14px'
+    fontSize: '14px',
   },
   message: {
     textAlign: 'center',
     color: '#28a745',
-    fontSize: '16px'
+    fontSize: '16px',
   },
   info: {
     marginTop: '24px',
     padding: '16px',
     backgroundColor: '#f8f9fa',
     borderRadius: '4px',
-    border: '1px solid #dee2e6'
+    border: '1px solid #dee2e6',
   },
   infoText: {
     fontSize: '13px',
     color: '#666',
     margin: 0,
-    lineHeight: '1.6'
-  }
-}
-
+    lineHeight: '1.6',
+  },
+};
