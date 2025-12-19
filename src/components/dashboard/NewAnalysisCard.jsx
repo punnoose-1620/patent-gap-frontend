@@ -1,10 +1,8 @@
 import { Plus, FileUp, Search, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
-export function NewAnalysisCard() {
-  const navigate = useNavigate();
+export function NewAnalysisCard({ onOpenModal }) {
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20 hover:border-primary/40 transition-colors">
@@ -26,7 +24,7 @@ export function NewAnalysisCard() {
         
         <div className="flex flex-wrap gap-3">
           <Button 
-            onClick={() => navigate("/new-analysis?type=single")} 
+            onClick={onOpenModal} 
             className="gap-2"
             size="default"
           >
@@ -35,7 +33,7 @@ export function NewAnalysisCard() {
           </Button>
           
           <Button 
-            onClick={() => navigate("/new-analysis?type=portfolio")} 
+            onClick={onOpenModal} 
             variant="outline"
             className="gap-2"
             size="default"
@@ -45,7 +43,7 @@ export function NewAnalysisCard() {
           </Button>
           
           <Button 
-            onClick={() => navigate("/new-analysis?type=search")} 
+            onClick={onOpenModal} 
             variant="outline"
             className="gap-2"
             size="default"
