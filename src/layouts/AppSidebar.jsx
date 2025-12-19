@@ -20,11 +20,11 @@ export function AppSidebar() {
   const location = useLocation();
 
   return (
-    <Sidebar className="p-4 bg-slate-900">
-      <SidebarHeader className="bg-slate-900">
-        <h2 className="text-lg font-bold text-white">Patent Gap AI</h2>
+    <Sidebar className="p-4 bg-sidebar-background">
+      <SidebarHeader className="bg-sidebar-background">
+        <h2 className="text-lg font-bold text-sidebar-foreground">Patent Gap AI</h2>
       </SidebarHeader>
-      <SidebarContent className="bg-slate-900">
+      <SidebarContent className="bg-sidebar-background">
         <SidebarGroup title="Main" className="gap-2">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -33,18 +33,18 @@ export function AppSidebar() {
                 key={item.id}
                 to={item.path}
                 className={`flex items-center gap-3 pl-3 py-3 rounded-md transition-colors ${
-                  isActive ? 'bg-blue-600 ' : ' hover:bg-blue-500'
+                  isActive ? 'bg-sidebar-primary text-sidebar-primary-foreground' : 'text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`}
               >
-                <item.icon className={isActive ? 'text-white' : 'text-gray-300'} />
-                <span className={isActive ? 'text-white' : 'text-gray-300'}>{item.label}</span>
+                <item.icon className="w-5 h-5" />
+                <span>{item.label}</span>
               </Link>
             );
           })}
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-slate-900">
-        <p className="text-sm text-gray-400">© 2025 Patent Gap AI</p>
+      <SidebarFooter className="bg-sidebar-background">
+        <p className="text-sm text-sidebar-foreground/60">© 2025 Patent Gap AI</p>
       </SidebarFooter>
     </Sidebar>
   );
