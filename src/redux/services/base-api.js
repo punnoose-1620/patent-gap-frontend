@@ -6,7 +6,7 @@ const mutex = new Mutex()
 
 // Base query with auth headers
 const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  baseUrl: 'http://localhost:8000/api',
   prepareHeaders: (headers) => {
     headers.set('accept', '*/*')
     
@@ -15,13 +15,7 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set('Authorization', `Bearer ${token}`)
     }
-    
-    // Add CSRF token if available
-    const csrfToken = Cookies.get('csrftoken')
-    if (csrfToken) {
-      headers.set('X-CSRFToken', csrfToken)
-    }
-    
+
     return headers
   }
 })
@@ -91,4 +85,5 @@ export const baseApi = createApi({
   ],
   endpoints: () => ({})
 })
+
 

@@ -5,14 +5,14 @@ export const api = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get current user
     getUser: builder.query({
-      query: () => '/user/me/',
+      query: () => '/profile',
       providesTags: ['User']
     }),
-    
+
     // Login
     login: builder.mutation({
       query: (credentials) => ({
-        url: '/auth/login/',
+        url: '/login/',
         method: 'POST',
         body: credentials
       }),
@@ -25,10 +25,6 @@ export const api = baseApi.injectEndpoints({
             secure: true, 
             sameSite: 'Strict' 
           })
-          Cookies.set('refresh_token', data.refresh, { 
-            secure: true, 
-            sameSite: 'Strict' 
-          })
         } catch (err) {
           console.error('Login failed:', err)
         }
@@ -36,53 +32,9 @@ export const api = baseApi.injectEndpoints({
       invalidatesTags: ['User']
     }),
     
-    // Logout
-    logout: builder.mutation({
-      query: () => ({
-        url: '/auth/logout/',
-        method: 'POST'
-      }),
-      async onQueryStarted(arg, { queryFulfilled }) {
-        try {
-          await queryFulfilled
-          
-          // Clear cookies
-          Cookies.remove('access_token')
-          Cookies.remove('refresh_token')
-        } catch (err) {
-          console.error('Logout failed:', err)
-        }
-      },
-      invalidatesTags: ['User']
-    }),
-    
-    // Forgot password
-    forgotPassword: builder.mutation({
-      query: (email) => ({
-        url: '/auth/forgot-password/',
-        method: 'POST',
-        body: { email }
-      })
-    }),
-    
-    // Reset password
-    resetPassword: builder.mutation({
-      query: ({ password, token }) => ({
-        url: '/auth/reset-password/',
-        method: 'POST',
-        body: { password, token }
-      })
-    }),
-    
-    // Update user settings
-    updateUserSettings: builder.mutation({
-      query: ({ userId, settings }) => ({
-        url: `/users/${userId}/settings/`,
-        method: 'PATCH',
-        body: settings
-      }),
-      invalidatesTags: ['User']
-    })
+
+
+
   })
 })
 
@@ -90,9 +42,6 @@ export const api = baseApi.injectEndpoints({
 export const {
   useGetUserQuery,
   useLoginMutation,
-  useLogoutMutation,
-  useForgotPasswordMutation,
-  useResetPasswordMutation,
-  useUpdateUserSettingsMutation
 } = api
+
 
