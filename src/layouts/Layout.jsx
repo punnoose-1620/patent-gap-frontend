@@ -1,13 +1,14 @@
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { Outlet } from 'react-router-dom';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { Outlet, useLocation } from 'react-router-dom';
 import { AppSidebar } from './AppSidebar';
 
 function Layout() {
+  const location = useLocation();
+
   return (
     <SidebarProvider>
-      <AppSidebar />
-      <main>
-        <SidebarTrigger />
+      {location.pathname !== '/login' && <AppSidebar />}
+      <main className="w-full">
         <Outlet />
       </main>
     </SidebarProvider>
