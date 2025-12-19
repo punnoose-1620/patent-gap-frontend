@@ -1,6 +1,6 @@
-import Layout from '../layouts/Layout';
-import About from '../pages/About';
-import Home from '../pages/Home';
+import Layout from '@/layouts/Layout';
+import About from '@/pages/About';
+import Home from '@/pages/Home';
 
 export const publicRoutes = {
   path: '/',
