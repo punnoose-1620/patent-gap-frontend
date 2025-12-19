@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Upload, FileText, Shield, MessageSquare } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export const PatentUploadModal = ({ isOpen, onClose, onComplete }) => {
+  const navigate = useNavigate();
   const [step, setStep] = useState('upload');
   const [activeTab, setActiveTab] = useState('upload'); // 'upload' or 'patentId'
   const [projectName, setProjectName] = useState('');
@@ -40,6 +42,11 @@ export const PatentUploadModal = ({ isOpen, onClose, onComplete }) => {
         context,
         status: 'processing'
       });
+      
+      // Navigate to analysis page with patent info
+      const patent = activeTab === 'patentId' ? patentNumber : selectedFile?.name || 'Patent Document';
+      navigate(`/analysis?patent=${encodeURIComponent(patent)}&project=${encodeURIComponent(projectName)}`);
+      
       resetModal();
     }, 1000);
   };
