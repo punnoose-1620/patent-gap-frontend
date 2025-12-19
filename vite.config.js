@@ -13,6 +13,13 @@ export default defineConfig({
   ],
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://patent-gap-backend.onrender.com',
+        changeOrigin: true,
+        secure: true,
+      }
+    }
   },
   resolve: {
     alias: {
