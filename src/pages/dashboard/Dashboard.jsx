@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { FileText, Search, AlertTriangle, CheckCircle } from "lucide-react";
 import { ProjectCard } from "@/components/dashboard/ProjectCard";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 import { NewAnalysisCard } from "@/components/dashboard/NewAnalysisCard";
+import { PatentUploadModal } from "@/components/PatentUploadModal";
 
 const mockProjects = [
   {
@@ -39,6 +41,24 @@ const mockProjects = [
 ];
 
 export default function Dashboard() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Listen for custom event from sidebar
+    const handleOpenModal = () => setIsModalOpen(true);
+    window.addEventListener('openPatentModal', handleOpenModal);
+    
+    return () => {
+      window.removeEventListener('openPatentModal', handleOpenModal);
+    };
+  }, []);
+
+  const handleModalComplete = (projectData) => {
+    console.log('New project created:', projectData);
+    setIsModalOpen(false);
+    // You can add logic here to update the projects list
+  };
+
   return (
       <div className="p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header */}
@@ -51,8 +71,15 @@ export default function Dashboard() {
 
         {/* New Analysis Section */}
         <div className="mb-8">
-          <NewAnalysisCard />
+          <NewAnalysisCard onOpenModal={() => setIsModalOpen(true)} />
         </div>
+
+        {/* Patent Upload Modal */}
+        <PatentUploadModal 
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onComplete={handleModalComplete}
+        />
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
