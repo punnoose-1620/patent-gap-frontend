@@ -1,20 +1,16 @@
-import { Link, Outlet } from 'react-router-dom';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Outlet } from 'react-router-dom';
+import { AppSidebar } from './AppSidebar';
 
 function Layout() {
   return (
-    <div className="app-shell">
-      <header className="top-bar">
-        <div className="brand">Patent Gap AI</div>
-        <nav className="nav">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/login">Login</Link>
-        </nav>
-      </header>
-      <main className="content">
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
         <Outlet />
       </main>
-    </div>
+    </SidebarProvider>
   );
 }
 
