@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
@@ -10,6 +11,7 @@ export default defineConfig({
         plugins: [['babel-plugin-react-compiler']],
       },
     }),
+    tailwindcss(),
   ],
   server: {
     port: 3000,
@@ -18,8 +20,8 @@ export default defineConfig({
         target: 'https://patent-gap-backend.onrender.com',
         changeOrigin: true,
         secure: true,
-      }
-    }
+      },
+    },
   },
   resolve: {
     alias: {
