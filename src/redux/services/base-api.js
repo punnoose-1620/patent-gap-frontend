@@ -6,7 +6,7 @@ const mutex = new Mutex()
 
 // Base query with auth headers
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api', // Use proxy to avoid CORS issues
+  baseUrl: 'http://localhost:5000/api', // Direct connection to local backend
   credentials: 'include', // Important for session-based auth
   prepareHeaders: (headers) => {
     headers.set('accept', '*/*')

@@ -59,6 +59,32 @@ export default function Dashboard() {
     // You can add logic here to update the projects list
   };
 
+  // Fetches cases for the current user from the backend using their session user_id
+  async function fetchUserCases() {
+    try {
+      // Get 'session' from localStorage (if stored there by your auth logic)
+      const sessionData = JSON.parse(localStorage.getItem("session") || "{}");
+      const userId = sessionData?.user_id || sessionData?.user?.id;
+      if (!userId) {
+        throw new Error("User ID not found in session data");
+      }
+
+      const response = await fetch(`http://localhost:5000/api/my-cases?user_id=${userId}`, {
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch cases: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user cases:", error);
+      return [];
+    }
+  }
+
   return (
       <div className="p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header */}
